@@ -1,10 +1,11 @@
-var userToken = 'access_token=CAACEdEose0cBAKgKqQvml4YKFB4Sr2lvjSvAGGidAvI2ezp8HHZBEgY2b2CJtTZB5xx5nZAkmY9tdMF114EMEHzAT0qYJaUvp6SEV1wDZBGe405GUCTfJ8nJD1ZBlnLOyR7IsC9M19t8wHAE0IoLthcmjj7uvoHVH07oJiTdEx9IQmZCqQ47bZCEB31bSwXBZCsZD';
+var userToken = 'access_token=CAACEdEose0cBAFHviU8rfmr9NrTMhhmWaJnc18JZAFdQ6FbFEXBo7ZAzgezgCli4a1OhswGX732bWQwDy67ygzj8mZBIV0nJdeyt41dgddZBwKQPMc8IQGRrrLzVN5CtgkKByjk9dU9E2bktsyQPRiBlndM5ASGTvfCEEG9An6vHt0PvOHNm74u3bZAel98AZD';
+var userToken = 'access_token=';
 var f = {
 
     checkins : [],
     url : {
         me : 'https://graph.facebook.com/me?' + userToken,
-        checkins : 'https://graph.facebook.com/me/friends?fields=checkins.limit(1),picture.type(large)&format=json&offset=0&' + userToken,
+        checkins : 'https://graph.facebook.com/me/friends?fields=checkins.limit(1),picture.type(large)&format=json&offset=0',
         user : 'https://graph.facebook.com/',
         main : 'https://graph.facebook.com/'
     },
@@ -27,7 +28,7 @@ var f = {
                 }
             });
         };
-        getQueue(f.url.checkins);
+        getQueue(f.url.checkins + '&' + userToken);
     },
     initMap : function(callback){
         var users = [];
