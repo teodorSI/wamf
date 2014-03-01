@@ -1,49 +1,70 @@
 <html>
 <head>
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <!--<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>-->
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script src="scripts/lib/underscore-min.js"></script>
+    <script src="scripts/lib/jquery-2.1.0.min.js"></script>
     <script src="lib.js"></script>
-    <link rel="stylesheet" href="style.css"/>
+    <link rel="stylesheet" href="style.css" />
 </head>
-<body> 
-<div id="fb-root"></div>
-<script>
-    window.fbAsyncInit = function () {
-        FB.init({
-            appId: '515057728613710',
-            status: true, // check login status
-            cookie: true, // enable cookies to allow the server to access the session
-            xfbml: true,  // parse XFBML
-            scope: 'friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history'
-        });
+<body>
+    <script src="scripts/app/classes.js"></script>
+    <script src="scripts/app/map.js"></script>
+    <script src="scripts/app/utils.js"></script>
+    <script id="mapMarkerTemplate" type="text/template">
+        <div id="location">
+            <a href="<%= locationGroup.location.locationUrl %>"><%= locationGroup.location.locationName %></a>
+        </div>
+        <div id="friends">
+            <% _.each (locationGroup.friends, function (friend) { %>
+            <div id="friend">
+                <img src="<%= friend.photoUrl %>" />
+                <a href="<%= friend.friendUrl %>"><%= friend.name %></a>
+                <label><%= friend.lastCheckedIn %></label>
+            </div>
+            <% }); %>
+        </div>
+    </script>
+    <div id="map-canvas"></div>
+    <div id="fb-root"></div>
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '515057728613710',
+                status: true, // check login status
+                cookie: true, // enable cookies to allow the server to access the session
+                xfbml: true,  // parse XFBML
+                scope: 'friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history'
+            });
 
-        FB.Event.subscribe('auth.authResponseChange', function (response) {
-            console.log(response);
-            if (response.status === 'connected') {
-                userToken += response.authResponse.accessToken;
-                f.getCheckins(map.init);
-            } else if (response.status === 'not_authorized') {
-                FB.login();
-            } else {
-                FB.login();
+            FB.Event.subscribe('auth.authResponseChange', function (response) {
+                console.log(response);
+                if (response.status === 'connected') {
+                    userToken += response.authResponse.accessToken;
+                    f.getCheckins(map.init);
+                } else if (response.status === 'not_authorized') {
+                    FB.login();
+                } else {
+                    FB.login();
+                }
+            });
+        };
+
+        // Load the SDK asynchronously
+        (function (d) {
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {
+                return;
             }
-        });
-    };
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document));
+    </script>
 
-    // Load the SDK asynchronously
-    (function (d) {
-        var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-        if (d.getElementById(id)) {
-            return;
-        }
-        js = d.createElement('script');
-        js.id = id;
-        js.async = true;
-        js.src = "//connect.facebook.net/en_US/all.js";
-        ref.parentNode.insertBefore(js, ref);
-    }(document));
-</script>
-
-<fb:login-button show-faces="true" width="200" max-rows="1" perms="publish_checkins,user_checkins,friends_checkins"></fb:login-button>
-<!--<fb:login-button show-faces="true" width="200" max-rows="1" perms="friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history"></fb:login-button>-->
+    <fb:login-button show-faces="true" width="200" max-rows="1" perms="publish_checkins,user_checkins,friends_checkins"></fb:login-button>
+    <!--<fb:login-button show-faces="true" width="200" max-rows="1" perms="friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history"></fb:login-button>-->
 </body>
 </html>
