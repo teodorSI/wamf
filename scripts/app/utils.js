@@ -26,3 +26,30 @@ function dateDiff(a, b) {
 
     return Math.floor((utc1 - utc2) / 60000);// / 1440);
 }
+
+$(document).ready(function () {
+    $(".in-popup").fancybox({
+        maxWidth: 800,
+        maxHeight: 600,
+        fitToView: false,
+
+        autoSize: false,
+        closeClick: false,
+        openEffect: 'none',
+        closeEffect: 'none',
+        'width': 300,
+        height: 150,
+        'autoDimensions': false
+    });
+
+
+
+
+
+});
+
+function activateFancyBox() {
+
+    $(".fancyTrigger").fancybox();
+    $(".fancyTrigger").trigger('click');
+}
