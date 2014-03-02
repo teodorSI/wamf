@@ -1,68 +1,156 @@
-<html>
-<head>
-    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
-    <script src="scripts/lib/underscore-min.js"></script>
-    <script src="scripts/lib/jquery-2.1.0.min.js"></script>
-    <script src="scripts/app/facebook.js"></script>
-    <script src="scripts/app/classes.js"></script>
-    <script src="scripts/app/map.js"></script>
-    <script src="scripts/app/utils.js"></script>
-    <link rel="stylesheet" href="css/style.css" />
-</head>
-<body>
-    <script id="mapMarkerTemplate" type="text/template">
-        <div id="location">
-            <a href="<%= locationGroup.location.locationUrl %>"><%= locationGroup.location.locationName %></a>
-        </div>
-        <div id="friends">
-            <% _.each (locationGroup.friends, function (friend) { %>
-            <div id="friend">
-                <img src="<%= friend.photoUrl %>" />
-                <a href="<%= friend.friendUrl %>"><%= friend.name %></a>
-                <label><%= friend.lastCheckedIn %></label>
-            </div>
-            <% }); %>
-        </div>
-    </script>
-    <div id="map-canvas"></div>
-    <div id="fb-root"></div>
-    <script>
-        window.fbAsyncInit = function () {
-            FB.init({
-                appId: '515057728613710',
-                status: true, // check login status
-                cookie: true, // enable cookies to allow the server to access the session
-                xfbml: true,  // parse XFBML
-                scope: 'friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history'
-            });
+<!DOCTYPE html>
 
-            FB.Event.subscribe('auth.authResponseChange', function (response) {
-                if (response.status === 'connected') {
-                    userToken += response.authResponse.accessToken;
-                    f.getCheckins(initializeMap);
-                } else if (response.status === 'not_authorized') {
-                    FB.login();
-                } else {
-                    FB.login();
-                }
-            });
-        };
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>Where Are My Friends?</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./bootstrap.css" media="screen">
+    <link rel="stylesheet" href="./bootswatch.min.css">
 
-        // Load the SDK asynchronously
-        (function (d) {
-            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-            if (d.getElementById(id)) {
-                return;
-            }
-            js = d.createElement('script');
-            js.id = id;
-            js.async = true;
-            js.src = "//connect.facebook.net/en_US/all.js";
-            ref.parentNode.insertBefore(js, ref);
-        }(document));
+    <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+    <link rel="stylesheet" type="text/css" href="/css/normalize.css">
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+    <script type='text/javascript' src="http://fancyapps.com/fancybox/source/jquery.fancybox.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://fancyapps.com/fancybox/source/jquery.fancybox.css">
+    <style type='text/css'>
+     
+      #TheFancybox {
+        display: none;
+      }
+
+    </style>
+    <script type='text/javascript'>$(document).ready(function() {
+      $(".in-popup").fancybox({
+        maxWidth  : 800,
+        maxHeight : 600,
+        fitToView : false,
+        width   : '70%',
+        height    : '70%',
+        autoSize  : false,
+        closeClick  : false,
+        openEffect  : 'none',
+        closeEffect : 'none'
+      });
+    });
     </script>
 
-    <fb:login-button show-faces="true" width="200" max-rows="1" perms="publish_checkins,user_checkins,friends_checkins"></fb:login-button>
-    <!--<fb:login-button show-faces="true" width="200" max-rows="1" perms="friends_about_me,friends_actions.news,friends_birthday,friends_events,friends_hometown,friends_location,friends_photo_video_tags,friends_relationship_details,friends_status,friends_website,friends_actions.books,friends_actions.video,friends_checkins,friends_games_activity,friends_interests,friends_notes,friends_photos,friends_relationships,friends_subscriptions,friends_work_history,friends_actions.music,friends_activities,friends_education_history,friends_groups,friends_likes,friends_online_presence,friends_questions,friends_religion_politics,friends_videos,ads_management,create_note,manage_friendlists,photo_upload,publish_stream,read_mailbox,read_stream,sms,xmpp_login,ads_read,email,manage_notifications,publish_actions,read_friendlists,read_page_mailboxes,rsvp_event,status_update,create_event,export_stream,manage_pages,publish_checkins,read_insights,read_requests,share_item,video_upload,user_about_me,user_actions.news,user_birthday,user_events,user_groups,user_likes,user_online_presence,user_questions,user_religion_politics,user_videos,user_actions.books,user_actions.video,user_checkins,user_friends,user_hometown,user_location,user_photo_video_tags,user_relationship_details,user_status,user_website,user_actions.music,user_activities,user_education_history,user_games_activity,user_interests,user_notes,user_photos,user_relationships,user_subscriptions,user_work_history"></fb:login-button>-->
-</body>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="../bower_components/html5shiv/dist/html5shiv.js"></script>
+      <script src="../bower_components/respond/dest/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" async="" src="./bootswatch/ga.js"></script><script>
+
+     var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-48554713-1']);
+      _gaq.push(['_setDomainName', "wamf.co"]);
+        _gaq.push(['_setAllowLinker', true]);
+      _gaq.push(['_trackPageview']);
+
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+     })();
+
+    </script>
+	
+		<style type="text/css">
+    	html { height: 100% }
+
+      body {
+          font-size: 1em;
+          line-height: 1.4;
+        	height: 100%; 
+          margin: 0px;
+      }
+
+      #container { width: 100%; height: 100%; }
+      #nav { z-index: 100; position: absolute; margin: 10px 0px 0px 200px; background-color: #fff; border: 1px #000 Solid; padding: 5px; }
+      #map { width: 100%; height: 100% }
+        
+        .navbar-brand {
+      font-family: 'Cabin Sketch', cursive !important;
+      }
+
+      .navbar {
+      background-image: -webkit-linear-gradient(#404040, #454545, #333333) !important;
+      background-image: linear-gradient(#ffffff, #45454560%, #454545);
+      background-repeat: no-repeat;
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff54b4eb', endColorstr='#ff1d9ce5', GradientType=0);
+      border-bottom: 1px solid #454545;
+      filter: none;
+      -webkit-box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
+      }
+      #TheFancybox {
+        display: none;
+      }
+	  </style>
+
+	  <script type='text/javascript'>//<![CDATA[ 
+      function initialize() {
+          var mapOptions = {
+                  center: new google.maps.LatLng(46.774554, 23.606439),
+                  mapTypeId: google.maps.MapTypeId.ROADMAP,
+                  zoom: 17
+                };	 
+          var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+      };
+      //]]>  
+    </script>
+    <link href='http://fonts.googleapis.com/css?family=Cabin+Sketch' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+    <script type='text/javascript'>//<![CDATA[ 
+      $(window).load(function(){
+      // Note that the fancybox js file is loaded under the 
+      // "Add Resources" tab to the left.  Normally you would load it in your <head>
+      $("#TheFancybox").html("<p>Sign in with Facebook</p><img src=\"https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcS1zqbLCfcU9Hgl0uTATyn-mYvu2612GtvGwBYjD9GzbtKWkOnAgA\">");
+      $(".fancyTrigger").fancybox();
+      $(".fancyTrigger").trigger('click');
+      });//]]>  
+    </script>
+  </head>
+  
+  <script src="http://maps.google.com/maps/api/js?sensor=false&libraries=places" type="text/javascript"></script>
+
+  <body onload="initialize();">
+    <a class="fancyTrigger" href="#TheFancybox"></a>
+    <div id="TheFancybox"></div>
+    <div class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+
+        <div class="navbar-header">
+          <a class="navbar-brand"><img src="./Icon.png" style="width: 20px;height: 20px; margin-right: 10px; margin-bottom: 3px">Where Are My Friends?</a>
+        </div>
+
+        <div id="navbar-main">
+          <ul class="nav navbar-nav navbar-right">
+      		  <li><a href="#"><img src="./Refresh.png"></a></li>
+            <li class="dropdown">
+              <a style="cursor: pointer;" class="dropdown-toggle" data-toggle="dropdown" id="more"><img src="./Settings.png"></a>
+              <ul class="dropdown-menu" aria-labelledby="more">
+                <li><a class="in-popup" data-fancybox-type="iframe" href="./about.html">About</a></li>
+                <li><a class="in-popup" data-fancybox-type="iframe" href="./privacy-policy.html">Privacy policy</a></li>
+                <li class="divider"></li>
+                <li><a href="http://bootswatch.com/cerulean/bootswatch.less">Logout</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div id="container">
+      <div id="map"></div>
+    </div>
+
+    <script src="http://bootswatch.com/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="http://bootswatch.com/assets/js/bootswatch.js"></script>
+
+  </body>
 </html>
