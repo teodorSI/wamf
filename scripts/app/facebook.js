@@ -1,4 +1,3 @@
-var userToken = 'access_token=CAACEdEose0cBAFHviU8rfmr9NrTMhhmWaJnc18JZAFdQ6FbFEXBo7ZAzgezgCli4a1OhswGX732bWQwDy67ygzj8mZBIV0nJdeyt41dgddZBwKQPMc8IQGRrrLzVN5CtgkKByjk9dU9E2bktsyQPRiBlndM5ASGTvfCEEG9An6vHt0PvOHNm74u3bZAel98AZD';
 var userToken = 'access_token=';
 var f = {
 
