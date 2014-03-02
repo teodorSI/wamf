@@ -42,16 +42,16 @@ function addFriendsToMap(map, markerBounds, friends) {
     }, this);
 }
 
-function initializeMap() {
-    //var date = new Date();
-    //alert(date.toISOString());
-    var location1 = new Location(45, 45, 'google.com', 'Barul de la colt');
-    var location2 = new Location(40, 35, 'google.com', 'Barul de la colt');
+function initializeMap(friends) {
+    ////var date = new Date();
+    ////alert(date.toISOString());
+    //var location1 = new Location(45, 45, 'google.com', 'Barul de la colt');
+    //var location2 = new Location(40, 35, 'google.com', 'Barul de la colt');
 
-    var friend1 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Amicu', 'http://google.com', location1, '2014-03-01T19:00:00');
-    var friend2 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Colega', 'http://facebook.com', location1, '2014-03-01T19:00:00');
-    var friend3 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Colega2', 'http://facebook.com', location2, '2014-03-01T19:00:00');
-    var friends = [friend1, friend2, friend3];
+    //var friend1 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Amicu', 'http://google.com', location1, '2014-03-01T19:00:00');
+    //var friend2 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Colega', 'http://facebook.com', location1, '2014-03-01T19:00:00');
+    //var friend3 = new Friend('http://www.oh-sophia.net/wp-content/uploads/2013/08/person_ohsophie.png', 'Colega2', 'http://facebook.com', location2, '2014-03-01T19:00:00');
+    //var friends = [friend1, friend2, friend3];
 
     var markerBounds = new google.maps.LatLngBounds();
     var mapOptions = {
@@ -69,4 +69,4 @@ function initializeMap() {
     WAMF.map.fitBounds(markerBounds);
 }
 
-google.maps.event.addDomListener(window, 'load', initializeMap);
+//google.maps.event.addDomListener(window, 'load', initializeMap);
