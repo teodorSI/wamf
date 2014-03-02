@@ -42,7 +42,8 @@ var f = {
                 var locationUrl = f.url.main + v.checkins.data[0].place.id;
                 var locationName = v.checkins.data[0].place.name;
                 var checkinDate = v.checkins.data[0].created_time;
-                var user = new  Friend(latitude, longitude, picture, name, friendUrl, locationUrl, locationName, checkinDate);
+                var location = new Location(latitude, longitude, locationUrl, locationName);
+                var user = new  Friend(picture, name, friendUrl, location, checkinDate);
                 users.push(user);
             }
         });
