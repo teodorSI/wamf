@@ -116,6 +116,7 @@
 
               FB.Event.subscribe('auth.authResponseChange', function (response) {
                   if (response.status === 'connected') {
+					  $.fancybox.close();
                       userToken += response.authResponse.accessToken;
                       f.getCheckins(initializeMap);
                   }

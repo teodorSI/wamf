@@ -738,6 +738,40 @@ pre code {
   padding-left: 15px;
   padding-right: 15px;
 }
+@media (min-width: 200px) {
+  .navbar-brand > img {
+    display: none;
+  }
+  .navbar-brand {
+    position: absolute;
+    bottom: 9px;
+    left: 10px;
+    width: 100px;
+    font-size: 13px !important;
+  }
+}
+@media (min-width: 320px) {
+  .navbar-brand {
+    position: inherit;
+    bottom: 0px;
+    left: 0px;
+    width: 220px;
+    font-size: 18px !important;
+  }
+}
+@media (min-width: 350px) {
+  .navbar-brand > img {
+    display: inline-block;
+  }
+  .navbar-brand {
+    width: 250px;
+  }
+}
+@media (min-width: 410px) {
+  .container {
+    width: 410px;
+  }
+}
 @media (min-width: 450px) {
   .container {
     width: 432px;
@@ -3737,11 +3771,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar-toggle .icon-bar + .icon-bar {
   margin-top: 4px;
 }
-@media (min-width: 100px) {
-  .navbar-toggle {
-    /* display: none; */
-  }
-}
 .navbar-nav {
   margin: 7.5px -15px;
 }
@@ -3765,8 +3794,6 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
   .navbar-nav.navbar-right:last-child {
     margin-right: -15px;
   }
-}
-@media (min-width: 100px) {
   .navbar-left {
     float: left !important;
   }

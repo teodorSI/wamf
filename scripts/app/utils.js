@@ -33,13 +33,11 @@ $(document).ready(function () {
         maxHeight: 600,
         fitToView: false,
 
-        autoSize: false,
+        autoSize: true,
         closeClick: false,
         openEffect: 'none',
         closeEffect: 'none',
-        'width': 300,
-        height: 150,
-        'autoDimensions': false
+        'autoDimensions': true
     });
 
 
